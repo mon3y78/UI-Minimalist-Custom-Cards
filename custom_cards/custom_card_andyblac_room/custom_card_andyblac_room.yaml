@@ -267,7 +267,7 @@ custom_card_andyblac_room:
         - height: "14%"
       v:
         - position: "absolute"
-        - left: "50%"
+        - left: "45%"
         - bottom: "53%"
         - width: "20%"
         - height: "20%"
