@@ -65,25 +65,18 @@ custom_card_andyblac_room:
         return entity_type + entity_state;
       }
 
-      if (variables.sensor_label_1 && variables.sensor_label_2 && variables.sensor_label_3) {
-        return getState(variables.sensor_label_1) + spacer + getState(variables.sensor_label_2) + spacer + getState(variables.sensor_label_3);
-      } else if (variables.sensor_label_1 && variables.sensor_label_2) {
+      if (variables.sensor_label_1 && variables.sensor_label_2) {
         return getState(variables.sensor_label_1) + spacer + getState(variables.sensor_label_2);
-      } else if (variables.sensor_label_1 && variables.sensor_label_3) {
-        return getState(variables.sensor_label_1) + spacer + getState(variables.sensor_label_3);
-      } else if (variables.sensor_label_2 && variables.sensor_label_3) {
-        return getState(variables.sensor_label_2) + spacer + getState(variables.sensor_label_3);
       } else if (variables.sensor_label_1) {
         return getState(variables.sensor_label_1);
       } else if (variables.sensor_label_2) {
         return getState(variables.sensor_label_2);
-      } else if (variables.sensor_label_3) {
-        return getState(variables.sensor_label_3);
       } else if (entity?.entity_id) {
         return getState(entity.entity_id);
       }
       return variables.ulm_translation_state;
     ]]]
+
 
   state:
     - value: "unavailable"
@@ -184,11 +177,18 @@ custom_card_andyblac_room:
               return 'rgba(var(--color-'+variables.ulm_custom_card_andyblac_room_color+'),0.2)';
             }
           ]]]
+
+
     grid:
-      - grid-template-areas: "[[[ return !variables?.entity_1 ? (!variables?.entity_2 ? `'n n n' 'l l i3' 'i i i4'` : `'n n i2' 'l l i3' 'i i i4'`) : `'n n n i1' 'l l l i2' 'i i . i3' 'i i . i4'`; ]]]"
-      - grid-template-columns: "[[[ return !variables?.entity_1 ? '1fr 1fr 1fr' : '1fr 1fr 1fr 1fr'; ]]]"
-      - grid-template-rows: "[[[ return !variables?.entity_1 ? '1fr 1fr 1fr' : '1fr 1fr 1fr 1fr'; ]]]"
+      - grid-template-areas: "'n n v i1' 'l l l i2' 'i i . i3' 'i i . i4'"
+      - grid-template-columns: "1fr 1fr 1fr 1fr"
+      - grid-template-rows: "1fr 1fr 1fr 1fr"
       - justify-items: "center"
+
+
+
+
+
     card:
       - border-radius: "20px"
       - box-shadow: "var(--box-shadow)"
@@ -272,6 +272,12 @@ custom_card_andyblac_room:
         - bottom: "0%"
         - width: "14%"
         - height: "14%"
+      v:
+        - border-radius: "50%"
+        - width: "70%"
+        - height: "70%"
+        - line-height: 0
+        - display: "grid"
 
   custom_fields:
     notification: >
@@ -553,6 +559,37 @@ custom_card_andyblac_room:
               card:
                 - display: "none"
         entity: "[[[ return variables?.climate?.entity_id; ]]]"
+    v:
+      card:
+        type: "custom:button-card"
+        icon: "[[[ return variables?.v?.icon ]]]"
+        template: >
+          [[[
+            let templates = [ 'custom_card_andyblac_room_sensor_icon' ];
+            if (variables?.v?.templates?.length) {
+              templates.push(...variables.v.templates);
+            }
+            return templates;
+          ]]]
+        variables: >
+          [[[
+            let variables_tmp = variables.v;
+            if (variables?.v) {
+              variables_tmp['ulm_custom_card_andyblac_room_color'] = variables.ulm_custom_card_andyblac_room_color;
+            }
+            return variables_tmp;
+          ]]]
+        state:
+          - operator: "template"
+            value: "[[[ return !variables.v; ]]]"
+            styles:
+              card:
+                - display: "none"
+        entity: "[[[ return variables?.v?.entity_id; ]]]"
+
+
+
+
 
 custom_card_andyblac_room_widget_icon:
   variables:
@@ -662,7 +699,6 @@ custom_card_andyblac_room_sensor_icon:
   variables:
     ulm_custom_card_andyblac_room_sensor_color: "[[[ return variables.ulm_custom_card_andyblac_room_sensor_color ? variables.ulm_custom_card_andyblac_room_sensor_color : variables.ulm_custom_card_andyblac_room_color; ]]]"
     ulm_custom_card_andyblac_room_sensor_color_on: "[[[ return variables?.ulm_custom_card_andyblac_room_sensor_color_on ? variables.ulm_custom_card_andyblac_room_sensor_color_on : variables.ulm_custom_card_andyblac_room_sensor_color; ]]]"
-    ulm_custom_card_andyblac_room_sensor_show_on_state_only: false
     tap_action:
       action: "more-info"
     hold_action:
@@ -714,12 +750,6 @@ custom_card_andyblac_room_sensor_icon:
       - background: "none"
       - box-shadow: "none"
       - padding: "0px"
-      - display: >
-          [[[
-            if (variables.ulm_custom_card_andyblac_room_sensor_show_on_state_only == true) {
-              return variables?.ulm_active_state ? '' : 'none';
-            }
-          ]]]
     custom_fields:
       icon:
         - position: "absolute"
