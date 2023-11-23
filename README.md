@@ -2,6 +2,6 @@
 ![Downloads](https://img.shields.io/github/downloads/andyblac/UI-Minimalist-Custom-Cards/total)
 
 # Minimalist Custom Cards
-My custom cards for Minimalist UI.
+My custom cards for Minimalist UI + video.
 
 ![example-dark](docs/assets/img/Example_Dashboard_Dark.png)
